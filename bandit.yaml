@@ -1,0 +1,9 @@
+# 의도적으로 취약한 실습 코드(app/vulnerable)와 테스트의 공격 문자열은
+# 게이트에서 제외한다. 안전 구현(app/secure), 앱 골격, owasp-check 는 검사한다.
+exclude_dirs:
+  - app/vulnerable
+  - tests
+  - venv
+  - .venv
+  - .git
+skips: []
