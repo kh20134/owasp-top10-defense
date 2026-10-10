@@ -15,6 +15,26 @@ def test_md5_is_unsalted_and_exposed(client):
     assert login.get_json()["scheme"] == "md5"
 
 
+def test_exposed_md5_rejects_the_hash_and_falls_to_a_wordlist(client):
+    exposed = client.get("/lab/a02/vuln/stored/alice").get_json()["hash"]
+    passed_hash = client.post(
+        "/lab/a02/vuln/login",
+        json={"username": "alice", "password": exposed},
+    )
+    assert passed_hash.status_code == 401
+
+    wordlist = ("password", "123456", "alice-lab-pass", "letmein")
+    recovered = next(candidate for candidate in wordlist if weak_md5(candidate) == exposed)
+    assert recovered == ALICE["password"]
+
+    login = client.post(
+        "/lab/a02/vuln/login",
+        json={"username": "alice", "password": recovered},
+    )
+    assert login.status_code == 200
+    assert login.get_json()["scheme"] == "md5"
+
+
 def test_fixed_uses_argon2_and_does_not_expose_the_hash(client, app):
     first = hash_password(ALICE["password"])
     second = hash_password(ALICE["password"])
