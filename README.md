@@ -40,6 +40,8 @@ flowchart TB
 
 ![로컬 방어 실습 아키텍처](docs/architecture.svg)
 
+같은 그림의 PNG 렌더(Noto Sans CJK)는 [docs/architecture.png](docs/architecture.png)이다.
+
 ## 실행
 
 Python 3.11 또는 3.12.
